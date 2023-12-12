@@ -219,7 +219,6 @@ addTNTF();
 // STEP 4 CODE
 // Hide individual buildings in this area using 3D Tiles Styling language.
 buildingsTileset.style = new Cesium.Cesium3DTileStyle({
-  color: "color('E48F45')",
   // Create a style rule to control each building's "show" property.
   show: {
     conditions : [
@@ -261,7 +260,7 @@ buildingsTileset.style = new Cesium.Cesium3DTileStyle({
   },
   // Set the default color style for this particular 3D Tileset.
   // For any building that has a `cesium#color` property, use that color, otherwise make it white.
-  color: "Boolean(${feature['cesium#color']}) ? color(${feature['cesium#color']}) : color('#ffffff')"
+  color: "Boolean(${feature['cesium#color']}) ? color(${feature['cesium#color']}) : color('#FFF5C2')"
 });
 
 // Add the 3D Tileset you created from your Cesium ion account.
