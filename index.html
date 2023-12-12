@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script src="https://cesium.com/downloads/cesiumjs/releases/1.82/Build/Cesium/Cesium.js"></script>
-<link href="https://cesium.com/downloads/cesiumjs/releases/1.82/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-
-  <link href="style.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas Akhir SIGWEB</title>
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.112/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style type="text/css">
+      #toggle-building { z-index: 1; position: fixed; top: 5px; left: 5px; }
+    </style>
 </head>
 <body>
-  <div id="cesiumContainer"></div>
-  <script>
-    // Get your token from https://cesium.com/ion/tokens
-    Cesium.Ion.defaultAccessToken = 'your_token_here';
-    const viewer = new Cesium.Viewer('cesiumContainer');
-  </script>
-</body>
+    <div id="cesiumContainer"></div>
+    <button id="toggle-building">Masjid Kampus UGM</button>
+    <script src="script.js" type="module"></script>
+  </body>
 </html>
