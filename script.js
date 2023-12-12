@@ -4,7 +4,10 @@ Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 const viewer = new Cesium.Viewer('cesiumContainer', {
   terrainProvider: Cesium.createWorldTerrain()
 });
-const osmBuildings = viewer.scene.primitives.add(Cesium.createOsmBuildings());
+
+// Add Cesium OSM Buildings.
+const buildingsTileset = await Cesium.createOsmBuildingsAsync();
+viewer.scene.primitives.add(buildingsTileset);
 
 // STEP 3 CODE (first point)
 // This is one of the first radar samples collected for our flight.
@@ -18,62 +21,6 @@ const osmBuildings = viewer.scene.primitives.add(Cesium.createOsmBuildings());
 // Fly the camera to this point.
 // viewer.flyTo(pointEntity);
 
-// These are all the radar points from this flight.
-const flightData = JSON.parse(
-  '[{"longitude":110.38112,"latitude":-7.77376,"height":250},{"longitude":110.38164,"latitude":-7.77242,"height":220},{"longitude":110.38124,"latitude":-7.77120,"height":220},{"longitude":110.38135,"latitude":-7.77074,"height":250},{"longitude":110.38072,"latitude":-7.77030,"height":230},{"longitude":110.38106,"latitude":-7.76967,"height":220},{"longitude":110.37938,"latitude":-7.76889,"height":220},{"longitude":110.37981,"latitude":-7.76757,"height":220},{"longitude":110.38030,"latitude":-7.76718,"height":250},{"longitude":110.37869,"latitude":-7.76995,"height":250},{"longitude":110.37912,"latitude":-7.76873,"height":200},{"longitude":110.37578,"latitude":-7.76761,"height":220},{"longitude":110.37437,"latitude":-7.76725,"height":200},{"longitude":110.37485,"latitude":-7.76653,"height":180},{"longitude":110.37276,"latitude":-7.76532,"height":180},{"longitude":110.37241,"latitude":-7.76492,"height":180},{"longitude":110.37305,"latitude":-7.76370,"height":200},{"longitude":110.37176,"latitude":-7.76534,"height":180},{"longitude":110.37260,"latitude":-7.76564,"height":200},{"longitude":110.37217,"latitude":-7.76626,"height":200},{"longitude":110.37296,"latitude":-7.76668,"height":150}]'
-);
-
-/* Initialize the viewer clock:
-  Assume the radar samples are 30 seconds apart, and calculate the entire flight duration based on that assumption.
-  Get the start and stop date times of the flight, where the start is the known flight departure time (converted from PST 
-    to UTC) and the stop is the start plus the calculated duration. (Note that Cesium uses Julian dates. See 
-    https://simple.wikipedia.org/wiki/Julian_day.)
-  Initialize the viewer's clock by setting its start and stop to the flight start and stop times we just calculated. 
-  Also, set the viewer's current time to the start time and take the user to that time. 
-*/
-const timeStepInSeconds = 30;
-const totalSeconds = timeStepInSeconds * (flightData.length - 1);
-const start = Cesium.JulianDate.fromIso8601("2020-03-09T23:10:00Z");
-const stop = Cesium.JulianDate.addSeconds(start, totalSeconds, new Cesium.JulianDate());
-viewer.clock.startTime = start.clone();
-viewer.clock.stopTime = stop.clone();
-viewer.clock.currentTime = start.clone();
-viewer.timeline.zoomTo(start, stop);
-// Speed up the playback speed 50x.
-viewer.clock.multiplier = 50;
-// Start playing the scene.
-viewer.clock.shouldAnimate = true;
-
-// The SampledPositionedProperty stores the position and timestamp for each sample along the radar sample series.
-const positionProperty = new Cesium.SampledPositionProperty();
-
-for (let i = 0; i < flightData.length; i++) {
-  const dataPoint = flightData[i];
-
-  // Declare the time for this individual sample and store it in a new JulianDate instance.
-  const time = Cesium.JulianDate.addSeconds(start, i * timeStepInSeconds, new Cesium.JulianDate());
-  const position = Cesium.Cartesian3.fromDegrees(dataPoint.longitude, dataPoint.latitude, dataPoint.height);
-  // Store the position along with its timestamp.
-  // Here we add the positions all upfront, but these can be added at run-time as samples are received from a server.
-  positionProperty.addSample(time, position);
-
-  viewer.entities.add({
-    description: `Location: (${dataPoint.longitude}, ${dataPoint.latitude}, ${dataPoint.height})`,
-    position: position,
-    point: { pixelSize: 10, color: Cesium.Color.RED }
-  });
-}
-
-// STEP 4 CODE (green circle entity)
-// Create an entity to both visualize the entire radar sample series with a line and add a point that moves along the samples.
-const airplaneEntity = viewer.entities.add({
-  availability: new Cesium.TimeIntervalCollection([ new Cesium.TimeInterval({ start: start, stop: stop }) ]),
-  position: positionProperty,
-  point: { pixelSize: 30, color: Cesium.Color.GREEN },
-  path: new Cesium.PathGraphics({ width: 3 })
-});
-// Make the camera track this moving entity.
-viewer.trackedEntity = airplaneEntity;
 
 // STEP 3 CODE
 async function addBuilding() {
@@ -276,6 +223,73 @@ async function addTNTF() {
   addGeodesi();
   addFisika();
   addTNTF();
+
+// These are all the radar points from this flight.
+const flightData = JSON.parse(
+  '[{"longitude":110.38112,"latitude":-7.77376,"height":250},{"longitude":110.38164,"latitude":-7.77242,"height":220},{"longitude":110.38124,"latitude":-7.77120,"height":220},{"longitude":110.38135,"latitude":-7.77074,"height":250},{"longitude":110.38072,"latitude":-7.77030,"height":230},{"longitude":110.38106,"latitude":-7.76967,"height":220},{"longitude":110.37938,"latitude":-7.76889,"height":220},{"longitude":110.37981,"latitude":-7.76757,"height":220},{"longitude":110.38030,"latitude":-7.76718,"height":250},{"longitude":110.37869,"latitude":-7.76995,"height":250},{"longitude":110.37912,"latitude":-7.76873,"height":200},{"longitude":110.37578,"latitude":-7.76761,"height":220},{"longitude":110.37437,"latitude":-7.76725,"height":200},{"longitude":110.37485,"latitude":-7.76653,"height":180},{"longitude":110.37276,"latitude":-7.76532,"height":180},{"longitude":110.37241,"latitude":-7.76492,"height":180},{"longitude":110.37305,"latitude":-7.76370,"height":200},{"longitude":110.37176,"latitude":-7.76534,"height":180},{"longitude":110.37260,"latitude":-7.76564,"height":200},{"longitude":110.37217,"latitude":-7.76626,"height":200},{"longitude":110.37296,"latitude":-7.76668,"height":150}]'
+);
+
+/* Initialize the viewer clock:
+  Assume the radar samples are 30 seconds apart, and calculate the entire flight duration based on that assumption.
+  Get the start and stop date times of the flight, where the start is the known flight departure time (converted from PST 
+    to UTC) and the stop is the start plus the calculated duration. (Note that Cesium uses Julian dates. See 
+    https://simple.wikipedia.org/wiki/Julian_day.)
+  Initialize the viewer's clock by setting its start and stop to the flight start and stop times we just calculated. 
+  Also, set the viewer's current time to the start time and take the user to that time. 
+*/
+const timeStepInSeconds = 30;
+const totalSeconds = timeStepInSeconds * (flightData.length - 1);
+const start = Cesium.JulianDate.fromIso8601("2020-03-09T23:10:00Z");
+const stop = Cesium.JulianDate.addSeconds(start, totalSeconds, new Cesium.JulianDate());
+viewer.clock.startTime = start.clone();
+viewer.clock.stopTime = stop.clone();
+viewer.clock.currentTime = start.clone();
+viewer.timeline.zoomTo(start, stop);
+// Speed up the playback speed 50x.
+viewer.clock.multiplier = 50;
+// Start playing the scene.
+viewer.clock.shouldAnimate = true;
+
+// The SampledPositionedProperty stores the position and timestamp for each sample along the radar sample series.
+const positionProperty = new Cesium.SampledPositionProperty();
+
+for (let i = 0; i < flightData.length; i++) {
+  const dataPoint = flightData[i];
+
+  // Declare the time for this individual sample and store it in a new JulianDate instance.
+  const time = Cesium.JulianDate.addSeconds(start, i * timeStepInSeconds, new Cesium.JulianDate());
+  const position = Cesium.Cartesian3.fromDegrees(dataPoint.longitude, dataPoint.latitude, dataPoint.height);
+  // Store the position along with its timestamp.
+  // Here we add the positions all upfront, but these can be added at run-time as samples are received from a server.
+  positionProperty.addSample(time, position);
+
+  viewer.entities.add({
+    description: `Location: (${dataPoint.longitude}, ${dataPoint.latitude}, ${dataPoint.height})`,
+    position: position,
+    point: { pixelSize: 10, color: Cesium.Color.RED }
+  });
+}
+
+// STEP 4 CODE (green circle entity)
+// STEP 6 CODE (airplane entity)
+async function loadModel() {
+  // Load the glTF model from Cesium ion.
+  const airplaneUri = await Cesium.IonResource.fromAssetId(2388868);
+  const airplaneEntity = viewer.entities.add({
+    availability: new Cesium.TimeIntervalCollection([ new Cesium.TimeInterval({ start: start, stop: stop }) ]),
+    position: positionProperty,
+    // Attach the 3D model instead of the green point.
+    model: { uri: airplaneUri },
+    // Automatically compute the orientation from the position.
+    orientation: new Cesium.VelocityOrientationProperty(positionProperty),    
+    path: new Cesium.PathGraphics({ width: 3 })
+  });
+  
+  viewer.trackedEntity = airplaneEntity;
+}
+
+loadModel();
+
 // STEP 4 CODE
 // Hide individual buildings in this area using 3D Tiles Styling language.
 buildingsTileset.style = new Cesium.Cesium3DTileStyle({
@@ -329,7 +343,3 @@ viewer.scene.primitives.add(newBuildingTileset);
 
 // Move the camera to the new building.
 viewer.flyTo(newBuildingTileset);
-// Toggle the tileset's show property when the button is clicked.
-document.querySelector('#toggle-building').onclick = function() {
-  newBuildingTileset.show = !newBuildingTileset.show;
-};
