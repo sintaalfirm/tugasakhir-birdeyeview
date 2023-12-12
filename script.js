@@ -1,5 +1,6 @@
 // Get your token from https://cesium.com/ion/tokens
-Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NWNlNWZlNy1mMmRkLTQ4MzItODhjMS1lNjVhYzNiNDBkYzMiLCJpZCI6MTgxNzA2LCJpYXQiOjE3MDEzMzQ0MDB9.3AbzVvu8KllEBmE6PuCS5b7bJ6SFcFrn4hRnTVNjk6g';
+Cesium.Ion.defaultAccessToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NWNlNWZlNy1mMmRkLTQ4MzItODhjMS1lNjVhYzNiNDBkYzMiLCJpZCI6MTgxNzA2LCJpYXQiOjE3MDEzMzQ0MDB9.3AbzVvu8KllEBmE6PuCS5b7bJ6SFcFrn4hRnTVNjk6g";
 // Initialize the viewer with Cesium World Terrain.
 const viewer = new Cesium.Viewer("cesiumContainer", {
   terrainProvider: await Cesium.CesiumTerrainProvider.fromIonAssetId(1),
@@ -39,24 +40,25 @@ addBuilding();
 buildingsTileset.style = new Cesium.Cesium3DTileStyle({
   // Create a style rule to control each building's "show" property.
   show: {
-    conditions : [
+    conditions: [
       // Any building that has this elementId will have `show = false`.
-      ['${elementId} === 364267636', false],
-      ['${elementId} === 265567215', false],
-      ['${elementId} === 265567220', false],
-      ['${elementId} === 1084197567', false],
-      ['${elementId} === 265567219', false],
-      ['${elementId} === 265567216', false],
-      ['${elementId} === 265567218', false],
-      ['${elementId} === 265567217', false],
-      ['${elementId} === 1084204353', false],
+      ["${elementId} === 364267636", false],
+      ["${elementId} === 265567215", false],
+      ["${elementId} === 265567220", false],
+      ["${elementId} === 1084197567", false],
+      ["${elementId} === 265567219", false],
+      ["${elementId} === 265567216", false],
+      ["${elementId} === 265567218", false],
+      ["${elementId} === 265567217", false],
+      ["${elementId} === 1084204353", false],
       // If a building does not have one of these elementIds, set `show = true`.
-      [true, true]
-    ]
+      [true, true],
+    ],
   },
   // Set the default color style for this particular 3D Tileset.
   // For any building that has a `cesium#color` property, use that color, otherwise make it white.
-  color: "Boolean(${feature['cesium#color']}) ? color(${feature['cesium#color']}) : color('#ffffff')"
+  color:
+    "Boolean(${feature['cesium#color']}) ? color(${feature['cesium#color']}) : color('#ffffff')",
 });
 
 // Add the 3D Tileset you created from your Cesium ion account.
@@ -66,6 +68,6 @@ viewer.scene.primitives.add(newBuildingTileset);
 // Move the camera to the new building.
 viewer.flyTo(newBuildingTileset);
 // Toggle the tileset's show property when the button is clicked.
-document.querySelector('#toggle-building').onclick = function() {
+document.querySelector("#toggle-building").onclick = function () {
   newBuildingTileset.show = !newBuildingTileset.show;
 };
