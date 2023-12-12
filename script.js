@@ -3,18 +3,14 @@
 // Get your token from https://cesium.com/ion/tokens
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NWNlNWZlNy1mMmRkLTQ4MzItODhjMS1lNjVhYzNiNDBkYzMiLCJpZCI6MTgxNzA2LCJpYXQiOjE3MDEzMzQ0MDB9.3AbzVvu8KllEBmE6PuCS5b7bJ6SFcFrn4hRnTVNjk6g';
 // Initialize the viewer with Cesium World Terrain.
-const viewer = new Cesium.Viewer("cesiumContainer", {
-  terrainProvider: await Cesium.CesiumTerrainProvider.fromIonAssetId(1),
-  vrButton: true,
-});
-viewer.scene.globe.depthTestAgainstTerrain = true;
 
-// Define the path for the camera
-const path = [
-  Cesium.Cartesian3.fromDegrees(-7.77352, 110.38028, 230),
-  Cesium.Cartesian3.fromDegrees(-74.0607, 40.7114, 5000),
-  Cesium.Cartesian3.fromDegrees(-74.0507, 40.7114, 5000),
-];
+    // Initialize the viewer with Cesium World Terrain.
+const viewer = new Cesium.Viewer('cesiumContainer', {
+  terrain: Cesium.Terrain.fromWorldTerrain(),
+});
+
+
+
 
 // Fly the camera to Denver, Colorado at the given longitude, latitude, and height.
 /* viewer.camera.flyTo({
@@ -277,7 +273,14 @@ buildingsTileset.style = new Cesium.Cesium3DTileStyle({
 const newBuildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388338);
 viewer.scene.primitives.add(newBuildingTileset);
 
-/ Create a SampledPositionProperty for the camera path
+// Define the path for the camera
+const path = [
+  Cesium.Cartesian3.fromDegrees(-74.0707, 40.7114, 5000),
+  Cesium.Cartesian3.fromDegrees(-74.0607, 40.7114, 5000),
+  Cesium.Cartesian3.fromDegrees(-74.0507, 40.7114, 5000),
+];
+
+// Create a SampledPositionProperty for the camera path
 const positionProperty = new Cesium.SampledPositionProperty();
 path.forEach((position, index) => {
   const time = Cesium.JulianDate.addSeconds(
@@ -320,6 +323,7 @@ viewer.camera.flyTo({
     viewer.scene.requestVRButton(true);
   },
 });
+
 // Toggle the tileset's show property when the button is clicked.
 document.querySelector('#toggle-building').onclick = function() {
   newBuildingTileset.show = !newBuildingTileset.show;
