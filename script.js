@@ -72,10 +72,129 @@ async function addFilsafat() {
   // viewer.flyTo(dataSource);
 }
 
+async function addPerpusat() {
+  // Load the GeoJSON file from Cesium ion.
+  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388588);
+  viewer.scene.primitives.add(tileset);
+  await viewer.zoomTo(tileset);
+
+  // Apply the default style if it exists
+  const extras = tileset.asset.extras;
+  if (
+    Cesium.defined(extras) &&
+    Cesium.defined(extras.ion) &&
+    Cesium.defined(extras.ion.defaultStyle)
+  ) {
+    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+  }
+  // Move the camera so that the polygon is in view.
+  // viewer.flyTo(dataSource);
+}
+
+async function addHukum2() {
+  // Load the GeoJSON file from Cesium ion.
+  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388594);
+  viewer.scene.primitives.add(tileset);
+  await viewer.zoomTo(tileset);
+
+  // Apply the default style if it exists
+  const extras = tileset.asset.extras;
+  if (
+    Cesium.defined(extras) &&
+    Cesium.defined(extras.ion) &&
+    Cesium.defined(extras.ion.defaultStyle)
+  ) {
+    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+  }
+  // Move the camera so that the polygon is in view.
+  // viewer.flyTo(dataSource);
+}
+
+async function addKehutanan() {
+  // Load the GeoJSON file from Cesium ion.
+  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388600);
+  viewer.scene.primitives.add(tileset);
+  await viewer.zoomTo(tileset);
+
+  // Apply the default style if it exists
+  const extras = tileset.asset.extras;
+  if (
+    Cesium.defined(extras) &&
+    Cesium.defined(extras.ion) &&
+    Cesium.defined(extras.ion.defaultStyle)
+  ) {
+    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+  }
+  // Move the camera so that the polygon is in view.
+  // viewer.flyTo(dataSource);
+}
+
+async function addPerustek() {
+  // Load the GeoJSON file from Cesium ion.
+  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388615);
+  viewer.scene.primitives.add(tileset);
+  await viewer.zoomTo(tileset);
+
+  // Apply the default style if it exists
+  const extras = tileset.asset.extras;
+  if (
+    Cesium.defined(extras) &&
+    Cesium.defined(extras.ion) &&
+    Cesium.defined(extras.ion.defaultStyle)
+  ) {
+    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+  }
+  // Move the camera so that the polygon is in view.
+  // viewer.flyTo(dataSource);
+}
+
+async function addGeodesi() {
+  // Load the GeoJSON file from Cesium ion.
+  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388625);
+  viewer.scene.primitives.add(tileset);
+  await viewer.zoomTo(tileset);
+
+  // Apply the default style if it exists
+  const extras = tileset.asset.extras;
+  if (
+    Cesium.defined(extras) &&
+    Cesium.defined(extras.ion) &&
+    Cesium.defined(extras.ion.defaultStyle)
+  ) {
+    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+  }
+  // Move the camera so that the polygon is in view.
+  // viewer.flyTo(dataSource);
+}
+
+async function addFisika() {
+  // Load the GeoJSON file from Cesium ion.
+  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388638);
+  viewer.scene.primitives.add(tileset);
+  await viewer.zoomTo(tileset);
+
+  // Apply the default style if it exists
+  const extras = tileset.asset.extras;
+  if (
+    Cesium.defined(extras) &&
+    Cesium.defined(extras.ion) &&
+    Cesium.defined(extras.ion.defaultStyle)
+  ) {
+    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+  }
+  // Move the camera so that the polygon is in view.
+  // viewer.flyTo(dataSource);
+}
 
 addBuilding();
 addHukum1();
 addFilsafat();
+addPerpusat()
+addHukum2();
+addKehutanan();
+addPerustek();
+addGeodesi();
+addFisika();
 // STEP 4 CODE
 // Hide individual buildings in this area using 3D Tiles Styling language.
 buildingsTileset.style = new Cesium.Cesium3DTileStyle({
