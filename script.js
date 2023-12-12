@@ -34,7 +34,7 @@ async function addBuilding() {
   // viewer.flyTo(dataSource);
 }
 
-async function addBuilding2() {
+async function addHukum1() {
   // Load the GeoJSON file from Cesium ion.
   const tileset2 = await Cesium.Cesium3DTileset.fromIonAssetId(2388464);
   viewer.scene.primitives.add(tileset2);
@@ -53,9 +53,9 @@ async function addBuilding2() {
   // viewer.flyTo(dataSource);
 }
 
-async function addBuilding2() {
+async function addFilsafat() {
   // Load the GeoJSON file from Cesium ion.
-  const tileset2 = await Cesium.Cesium3DTileset.fromIonAssetId(2388464);
+  const tileset2 = await Cesium.Cesium3DTileset.fromIonAssetId(2388548);
   viewer.scene.primitives.add(tileset2);
   await viewer.zoomTo(tileset2);
 
@@ -71,9 +71,11 @@ async function addBuilding2() {
   // Move the camera so that the polygon is in view.
   // viewer.flyTo(dataSource);
 }
+
 
 addBuilding();
-addBuilding2();
+addHukum1();
+addFilsafat();
 // STEP 4 CODE
 // Hide individual buildings in this area using 3D Tiles Styling language.
 buildingsTileset.style = new Cesium.Cesium3DTileStyle({
@@ -90,6 +92,14 @@ buildingsTileset.style = new Cesium.Cesium3DTileStyle({
       ['${elementId} === 265567218', false],
       ['${elementId} === 265567217', false],
       ['${elementId} === 1084204353', false],
+      ['${elementId} === 121239622', false],
+      ['${elementId} === 263939057', false],
+      ['${elementId} === 263939072', false],
+      ['${elementId} === 384008371', false],
+      ['${elementId} === 121815582', false],
+      ['${elementId} === 384008370', false],
+      ['${elementId} === 384008372', false],
+      ['${elementId} === 121815583', false],
       // If a building does not have one of these elementIds, set `show = true`.
       [true, true]
     ]
