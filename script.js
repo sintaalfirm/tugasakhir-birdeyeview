@@ -100,6 +100,12 @@ buildingsTileset.style = new Cesium.Cesium3DTileStyle({
       ['${elementId} === 384008370', false],
       ['${elementId} === 384008372', false],
       ['${elementId} === 121815583', false],
+      ['${elementId} === 121815583', false],
+      ['${elementId} === 121815583', false],
+      ['${elementId} === 121815583', false],
+      ['${elementId} === 121815583', false],
+      ['${elementId} === 121815583', false],
+  
       // If a building does not have one of these elementIds, set `show = true`.
       [true, true]
     ]
