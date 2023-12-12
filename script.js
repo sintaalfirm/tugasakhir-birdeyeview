@@ -2,8 +2,8 @@
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NWNlNWZlNy1mMmRkLTQ4MzItODhjMS1lNjVhYzNiNDBkYzMiLCJpZCI6MTgxNzA2LCJpYXQiOjE3MDEzMzQ0MDB9.3AbzVvu8KllEBmE6PuCS5b7bJ6SFcFrn4hRnTVNjk6g';
 // Initialize the viewer with Cesium World Terrain.
 const viewer = new Cesium.Viewer('cesiumContainer', {
-  terrainProvider: Cesium.createWorldTerrain()
-});
+    terrain: Cesium.Terrain.fromWorldTerrain(),
+  });
 
 // Add Cesium OSM Buildings.
 const buildingsTileset = await Cesium.createOsmBuildingsAsync();
@@ -246,7 +246,7 @@ viewer.clock.stopTime = stop.clone();
 viewer.clock.currentTime = start.clone();
 viewer.timeline.zoomTo(start, stop);
 // Speed up the playback speed 50x.
-viewer.clock.multiplier = 50;
+viewer.clock.multiplier = 7;
 // Start playing the scene.
 viewer.clock.shouldAnimate = true;
 
