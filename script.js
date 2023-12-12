@@ -1,26 +1,32 @@
-
-
 // Get your token from https://cesium.com/ion/tokens
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NWNlNWZlNy1mMmRkLTQ4MzItODhjMS1lNjVhYzNiNDBkYzMiLCJpZCI6MTgxNzA2LCJpYXQiOjE3MDEzMzQ0MDB9.3AbzVvu8KllEBmE6PuCS5b7bJ6SFcFrn4hRnTVNjk6g';
 // Initialize the viewer with Cesium World Terrain.
-
-    // Initialize the viewer with Cesium World Terrain.
-const viewer = new Cesium.Viewer('cesiumContainer', {
-  terrain: Cesium.Terrain.fromWorldTerrain(),
+const viewer = new Cesium.Viewer("cesiumContainer", {
+  terrainProvider: await Cesium.CesiumTerrainProvider.fromIonAssetId(1),
 });
-
-
-
+viewer.scene.globe.depthTestAgainstTerrain = true;
 
 // Fly the camera to Denver, Colorado at the given longitude, latitude, and height.
 /* viewer.camera.flyTo({
   destination: Cesium.Cartesian3.fromDegrees(-104.9965, 39.74248, 4000)
 }); */
 
-
 // Add Cesium OSM Buildings.
 const buildingsTileset = await Cesium.createOsmBuildingsAsync();
 viewer.scene.primitives.add(buildingsTileset);
+
+STEP 3 CODE (first point)
+// This is one of the first radar samples collected for our flight.
+const dataPoint = { longitude: 110.38092, latitude: -7.77390, height: 250 };
+// Mark this location with a red point.
+const pointEntity = viewer.entities.add({
+  description: `First data point at (${dataPoint.longitude}, ${dataPoint.latitude})`,
+  position: Cesium.Cartesian3.fromDegrees(dataPoint.longitude, dataPoint.latitude, dataPoint.height),
+  point: { pixelSize: 10, color: Cesium.Color.RED }
+});
+// Fly the camera to this point.
+viewer.flyTo(pointEntity);
+
 // STEP 3 CODE
 async function addBuilding() {
   // Load the GeoJSON file from Cesium ion.
@@ -48,13 +54,13 @@ async function addHukum1() {
   await viewer.zoomTo(tileset2);
 
   // Apply the default style if it exists
-  const extras = tileset.asset.extras;
+  const extras = tileset2.asset.extras;
   if (
     Cesium.defined(extras) &&
     Cesium.defined(extras.ion) &&
     Cesium.defined(extras.ion.defaultStyle)
   ) {
-    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    tileset2.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
   }
   // Move the camera so that the polygon is in view.
   // viewer.flyTo(dataSource);
@@ -67,13 +73,13 @@ async function addFilsafat() {
   await viewer.zoomTo(tileset2);
 
   // Apply the default style if it exists
-  const extras = tileset.asset.extras;
+  const extras = tileset2.asset.extras;
   if (
     Cesium.defined(extras) &&
     Cesium.defined(extras.ion) &&
     Cesium.defined(extras.ion.defaultStyle)
   ) {
-    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    tileset2.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
   }
   // Move the camera so that the polygon is in view.
   // viewer.flyTo(dataSource);
@@ -175,53 +181,53 @@ async function addGeodesi() {
 }
 
 async function addFisika() {
-  // Load the GeoJSON file from Cesium ion.
-  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388638);
-  viewer.scene.primitives.add(tileset);
-  await viewer.zoomTo(tileset);
-
-  // Apply the default style if it exists
-  const extras = tileset.asset.extras;
-  if (
-    Cesium.defined(extras) &&
-    Cesium.defined(extras.ion) &&
-    Cesium.defined(extras.ion.defaultStyle)
-  ) {
-    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    // Load the GeoJSON file from Cesium ion.
+    const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388638);
+    viewer.scene.primitives.add(tileset);
+    await viewer.zoomTo(tileset);
+  
+    // Apply the default style if it exists
+    const extras = tileset.asset.extras;
+    if (
+      Cesium.defined(extras) &&
+      Cesium.defined(extras.ion) &&
+      Cesium.defined(extras.ion.defaultStyle)
+    ) {
+      tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    }
+    // Move the camera so that the polygon is in view.
+    // viewer.flyTo(dataSource);
   }
-  // Move the camera so that the polygon is in view.
-  // viewer.flyTo(dataSource);
-}
 
 async function addTNTF() {
-  // Load the GeoJSON file from Cesium ion.
-  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388661);
-  viewer.scene.primitives.add(tileset);
-  await viewer.zoomTo(tileset);
-
-  // Apply the default style if it exists
-  const extras = tileset.asset.extras;
-  if (
-    Cesium.defined(extras) &&
-    Cesium.defined(extras.ion) &&
-    Cesium.defined(extras.ion.defaultStyle)
-  ) {
-    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    // Load the GeoJSON file from Cesium ion.
+    const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388661);
+    viewer.scene.primitives.add(tileset);
+    await viewer.zoomTo(tileset);
+  
+    // Apply the default style if it exists
+    const extras = tileset.asset.extras;
+    if (
+      Cesium.defined(extras) &&
+      Cesium.defined(extras.ion) &&
+      Cesium.defined(extras.ion.defaultStyle)
+    ) {
+      tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    }
+    // Move the camera so that the polygon is in view.
+    // viewer.flyTo(dataSource);
   }
-  // Move the camera so that the polygon is in view.
-  // viewer.flyTo(dataSource);
-}
-
-addBuilding();
-addHukum1();
-addFilsafat();
-addPerpusat()
-addHukum2();
-addKehutanan();
-addPerustek();
-addGeodesi();
-addFisika();
-addTNTF();
+  
+  addBuilding();
+  addHukum1();
+  addFilsafat();
+  addPerpusat()
+  addHukum2();
+  addKehutanan();
+  addPerustek();
+  addGeodesi();
+  addFisika();
+  addTNTF();
 // STEP 4 CODE
 // Hide individual buildings in this area using 3D Tiles Styling language.
 buildingsTileset.style = new Cesium.Cesium3DTileStyle({
@@ -273,57 +279,8 @@ buildingsTileset.style = new Cesium.Cesium3DTileStyle({
 const newBuildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388338);
 viewer.scene.primitives.add(newBuildingTileset);
 
-// Define the path for the camera
-const path = [
-  Cesium.Cartesian3.fromDegrees(-74.0707, 40.7114, 5000),
-  Cesium.Cartesian3.fromDegrees(-74.0607, 40.7114, 5000),
-  Cesium.Cartesian3.fromDegrees(-74.0507, 40.7114, 5000),
-];
-
-// Create a SampledPositionProperty for the camera path
-const positionProperty = new Cesium.SampledPositionProperty();
-path.forEach((position, index) => {
-  const time = Cesium.JulianDate.addSeconds(
-    Cesium.JulianDate.now(),
-    index * 2,
-    new Cesium.JulianDate()
-  );
-  positionProperty.addSample(time, position);
-});
-
-// Create a PathGraphics to visualize the path
-const pathGraphics = new Cesium.PathGraphics();
-pathGraphics.width = 10; // Set the width of the path
-
-// Create an entity to represent the camera path
-const pathEntity = viewer.entities.add({
-  position: positionProperty,
-  path: pathGraphics,
-});
-
-// Set the viewer's clock to match the time of the camera path
-viewer.clock.startTime = positionProperty.startTime;
-viewer.clock.stopTime = positionProperty.stopTime;
-viewer.clock.currentTime = positionProperty.startTime;
-viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // Loop the animation
-
-// Fly the camera to the starting position of the path
-viewer.flyTo(pathEntity);
-
-// Set the camera to follow the path in VR mode
-viewer.camera.flyTo({
-  destination: path[0],
-  orientation: {
-    direction: new Cesium.Cartesian3(1.0, 0.0, 0.0),
-    up: new Cesium.Cartesian3(0.0, 0.0, 1.0),
-  },
-  convert: false,
-  complete: () => {
-    // Enable VR mode after the camera has flown to the starting position
-    viewer.scene.requestVRButton(true);
-  },
-});
-
+// Move the camera to the new building.
+viewer.flyTo(newBuildingTileset);
 // Toggle the tileset's show property when the button is clicked.
 document.querySelector('#toggle-building').onclick = function() {
   newBuildingTileset.show = !newBuildingTileset.show;
