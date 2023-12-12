@@ -1,10 +1,20 @@
+
+
 // Get your token from https://cesium.com/ion/tokens
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NWNlNWZlNy1mMmRkLTQ4MzItODhjMS1lNjVhYzNiNDBkYzMiLCJpZCI6MTgxNzA2LCJpYXQiOjE3MDEzMzQ0MDB9.3AbzVvu8KllEBmE6PuCS5b7bJ6SFcFrn4hRnTVNjk6g';
 // Initialize the viewer with Cesium World Terrain.
 const viewer = new Cesium.Viewer("cesiumContainer", {
   terrainProvider: await Cesium.CesiumTerrainProvider.fromIonAssetId(1),
+  vrButton: true,
 });
 viewer.scene.globe.depthTestAgainstTerrain = true;
+
+// Define the path for the camera
+const path = [
+  Cesium.Cartesian3.fromDegrees(-7.77352, 110.38028, 230),
+  Cesium.Cartesian3.fromDegrees(-74.0607, 40.7114, 5000),
+  Cesium.Cartesian3.fromDegrees(-74.0507, 40.7114, 5000),
+];
 
 // Fly the camera to Denver, Colorado at the given longitude, latitude, and height.
 /* viewer.camera.flyTo({
@@ -267,8 +277,49 @@ buildingsTileset.style = new Cesium.Cesium3DTileStyle({
 const newBuildingTileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388338);
 viewer.scene.primitives.add(newBuildingTileset);
 
-// Move the camera to the new building.
-viewer.flyTo(newBuildingTileset);
+/ Create a SampledPositionProperty for the camera path
+const positionProperty = new Cesium.SampledPositionProperty();
+path.forEach((position, index) => {
+  const time = Cesium.JulianDate.addSeconds(
+    Cesium.JulianDate.now(),
+    index * 2,
+    new Cesium.JulianDate()
+  );
+  positionProperty.addSample(time, position);
+});
+
+// Create a PathGraphics to visualize the path
+const pathGraphics = new Cesium.PathGraphics();
+pathGraphics.width = 10; // Set the width of the path
+
+// Create an entity to represent the camera path
+const pathEntity = viewer.entities.add({
+  position: positionProperty,
+  path: pathGraphics,
+});
+
+// Set the viewer's clock to match the time of the camera path
+viewer.clock.startTime = positionProperty.startTime;
+viewer.clock.stopTime = positionProperty.stopTime;
+viewer.clock.currentTime = positionProperty.startTime;
+viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; // Loop the animation
+
+// Fly the camera to the starting position of the path
+viewer.flyTo(pathEntity);
+
+// Set the camera to follow the path in VR mode
+viewer.camera.flyTo({
+  destination: path[0],
+  orientation: {
+    direction: new Cesium.Cartesian3(1.0, 0.0, 0.0),
+    up: new Cesium.Cartesian3(0.0, 0.0, 1.0),
+  },
+  convert: false,
+  complete: () => {
+    // Enable VR mode after the camera has flown to the starting position
+    viewer.scene.requestVRButton(true);
+  },
+});
 // Toggle the tileset's show property when the button is clicked.
 document.querySelector('#toggle-building').onclick = function() {
   newBuildingTileset.show = !newBuildingTileset.show;
