@@ -11,6 +11,7 @@ viewer.scene.globe.depthTestAgainstTerrain = true;
   destination: Cesium.Cartesian3.fromDegrees(-104.9965, 39.74248, 4000)
 }); */
 
+
 // Add Cesium OSM Buildings.
 const buildingsTileset = await Cesium.createOsmBuildingsAsync();
 viewer.scene.primitives.add(buildingsTileset);
@@ -186,6 +187,25 @@ async function addFisika() {
   // viewer.flyTo(dataSource);
 }
 
+async function addTNTF() {
+  // Load the GeoJSON file from Cesium ion.
+  const tileset = await Cesium.Cesium3DTileset.fromIonAssetId(2388661);
+  viewer.scene.primitives.add(tileset);
+  await viewer.zoomTo(tileset);
+
+  // Apply the default style if it exists
+  const extras = tileset.asset.extras;
+  if (
+    Cesium.defined(extras) &&
+    Cesium.defined(extras.ion) &&
+    Cesium.defined(extras.ion.defaultStyle)
+  ) {
+    tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+  }
+  // Move the camera so that the polygon is in view.
+  // viewer.flyTo(dataSource);
+}
+
 addBuilding();
 addHukum1();
 addFilsafat();
@@ -195,9 +215,11 @@ addKehutanan();
 addPerustek();
 addGeodesi();
 addFisika();
+addTNTF();
 // STEP 4 CODE
 // Hide individual buildings in this area using 3D Tiles Styling language.
 buildingsTileset.style = new Cesium.Cesium3DTileStyle({
+  color: "color('E48F45')",
   // Create a style rule to control each building's "show" property.
   show: {
     conditions : [
